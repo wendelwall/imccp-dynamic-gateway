@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.inphase.imccp.domain.dao.SysRouteConfMapper">
+  <resultMap id="BaseResultMap" type="com.inphase.imccp.domain.entity.SysRouteConfEntity">
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="route_id" jdbcType="VARCHAR" property="routeId" />
+    <result column="predicates" property="predicates" typeHandler="com.inphase.imccp.object.util.JsonTypeHandler" />
+    <result column="filters" property="filters" typeHandler="com.inphase.imccp.object.util.JsonTypeHandler"/>
+    <result column="uri" jdbcType="VARCHAR" property="uri" />
+    <result column="orders" jdbcType="INTEGER" property="orders" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="del_flag" jdbcType="CHAR" property="delFlag" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, route_id, predicates, filters, uri, orders, create_time, update_time, del_flag
+  </sql>
+
+  <select id="getList" resultType="com.inphase.imccp.domain.entity.SysRouteConfEntity">
+    SELECT
+    id id,
+    route_id routeId,
+    predicates predicates,
+    filters filters,
+    uri uri,
+    orders orders,
+    create_time createTime,
+    update_time updateTime,
+    del_flag delFlag
+    from sys_route_conf where del_flag = 0 ORDER BY create_time
+    <if test="pageNum &gt; 1">
+      LIMIT ${(pageNum-1)*pageSize},${pageSize};
+    </if>
+    <if test="pageNum &lt;= 1">
+      LIMIT 0,${pageSize};
+    </if>
+  </select>
+
+  <select id="getAll" resultType="com.inphase.imccp.domain.entity.SysRouteConfEntity">
+    SELECT
+    id id,
+    route_id routeId,
+    predicates predicates,
+    filters filters,
+    uri uri,
+    orders orders,
+    create_time createTime,
+    update_time updateTime,
+    del_flag delFlag
+    from sys_route_conf where del_flag = 0 ORDER BY create_time
+  </select>
+
+  <insert id="add" parameterType="com.inphase.imccp.domain.entity.SysRouteConfEntity">
+    insert into sys_route_conf(id,route_id,predicates,filters,uri,create_time,del_flag) values (
+      #{id,jdbcType=VARCHAR},
+      #{routeId,jdbcType=VARCHAR},
+      #{predicates,jdbcType=VARCHAR,typeHandler=com.inphase.imccp.object.util.JsonTypeHandler},
+      #{filters,jdbcType=VARCHAR,typeHandler=com.inphase.imccp.object.util.JsonTypeHandler},
+      #{uri,jdbcType=VARCHAR},
+      #{createTime,jdbcType=TIMESTAMP},
+      #{delFlag,jdbcType=VARCHAR})
+  </insert>
+  
+  <update id="deleteById" parameterType="com.inphase.imccp.domain.entity.SysRouteConfEntity">
+    update sys_route_conf set del_flag = "1" where id = #{id}
+  </update>
+
+  <update id="update" parameterType="com.inphase.imccp.domain.entity.SysRouteConfEntity">
+    update sys_route_conf
+    <set>
+      <if test="routeId != null">route_id = #{routeId,jdbcType=VARCHAR},</if>
+      <if test="predicates != null">predicates = #{predicates,jdbcType=VARCHAR,typeHandler=com.inphase.imccp.object.util.JsonTypeHandler},</if>
+      <if test="filters != null">filters = #{filters,jdbcType=VARCHAR,typeHandler=com.inphase.imccp.object.util.JsonTypeHandler},</if>
+      <if test="uri != null">uri = #{uri,jdbcType=VARCHAR},</if>
+      <if test="updateTime != null">update_time = #{updateTime,jdbcType=TIMESTAMP}</if>
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+
+</mapper>

@@ -1,0 +1,29 @@
+spring:
+  application:
+    name: imccp-dynamic-gateway-restapi
+  profiles:
+    active: @spring.active@
+  cloud:
+    config:
+      profile: @spring.active@
+      label: develop
+
+---
+spring:
+  profiles: local
+  cloud:
+    config:
+      profile: local
+      uri: http://imccp-config-server.imccp:10002
+
+eureka:
+  client:
+    registryFetchIntervalSeconds: 5 #表示eureka client间隔多久去拉取服务注册信息，默认为30秒
+    service-url:
+      defaultZone: http://admin:password@114.55.58.53:8761/eureka/ #http://imccp-local-register.imccp:8761/eureka/
+    registry-fetch-interval-seconds: 10
+  instance:
+    prefer-ip-address: true
+    leaseRenewalIntervalInSeconds: 10 #表示eureka client发送心跳给server端的频率，默认为30秒
+    health-check-url-path: /actuator/health #健康检查的地址（依赖spring-boot-starter-actuator）
+---
