@@ -1,13 +1,20 @@
+server:
+  port: 8085
+
 spring:
   application:
     name: imccp-dynamic-gateway-web
   profiles:
     active: @spring.active@
+  rabbitmq:
+    host: 116.62.28.180
+    port: 5672
+    username: anyi
+    password: QmA17YugOQq
   cloud:
     config:
       profile: @spring.active@
       label: develop
-
 ---
 spring:
   profiles: local

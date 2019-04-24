@@ -154,43 +154,47 @@ public class SysRouteConfServiceImpl implements SysRouteConfService {
         GatewayRouteDefinition gatewayRouteDefinition = new GatewayRouteDefinition();
         gatewayRouteDefinition.setId(sysRouteConfEntity.getRouteId());
         // 设置断言
-        List<GatewayPredicateDefinition> predicates = new ArrayList<>();
         Object object = sysRouteConfEntity.getPredicates();
-        JSONArray jsonArray = JSONArray.fromObject(String.valueOf(object));
-        for (int i=0;i<jsonArray.size();i++){
-            JSONObject jsonObject = jsonArray.getJSONObject(i);
-            GatewayPredicateDefinition gatewayPredicateDefinition = new GatewayPredicateDefinition();
-            gatewayPredicateDefinition.setName(jsonObject.getString("name"));
-            JSONObject argsObject = (JSONObject)jsonObject.get("args");
-            Map<String,String> map = new HashMap<>();
-            map.put("_genkey_0",String.valueOf(argsObject.get("_genkey_0")));
-            gatewayPredicateDefinition.setArgs(map);
-            predicates.add(gatewayPredicateDefinition);
-        }
-        gatewayRouteDefinition.setPredicates(predicates);
-        // 设置过滤器
-        List<GatewayFilterDefinition>  filterDefinitionList = new ArrayList<>();
-        Object filterobject = sysRouteConfEntity.getFilters();
-        JSONArray filterArray = JSONArray.fromObject(String.valueOf(filterobject));
-        log.info("过滤器数组：{}"+ filterArray);
-        for (int i =0;i<filterArray.size();i++){
-            JSONObject filterObject = filterArray.getJSONObject(i);
-            GatewayFilterDefinition filterDefinition = new GatewayFilterDefinition();
-            filterDefinition.setName(filterObject.getString("name"));
-            JSONObject argsObject = (JSONObject)filterObject.get("args");
-            log.info("获取args:{}"+argsObject);
-            if (argsObject.isEmpty()){
-                log.info("获取args:{}"+argsObject);
-                Map<String,String> map = new HashMap<>();
-                filterDefinition.setArgs(map);
-            }else {
+        if(Objects.nonNull(object)){
+            List<GatewayPredicateDefinition> predicates = new ArrayList<>();
+            JSONArray jsonArray = JSONArray.fromObject(String.valueOf(object));
+            for (int i=0;i<jsonArray.size();i++){
+                JSONObject jsonObject = jsonArray.getJSONObject(i);
+                GatewayPredicateDefinition gatewayPredicateDefinition = new GatewayPredicateDefinition();
+                gatewayPredicateDefinition.setName(jsonObject.getString("name"));
+                JSONObject argsObject = (JSONObject)jsonObject.get("args");
                 Map<String,String> map = new HashMap<>();
                 map.put("_genkey_0",String.valueOf(argsObject.get("_genkey_0")));
-                filterDefinition.setArgs(map);
+                gatewayPredicateDefinition.setArgs(map);
+                predicates.add(gatewayPredicateDefinition);
             }
-            filterDefinitionList.add(filterDefinition);
+            gatewayRouteDefinition.setPredicates(predicates);
         }
-        gatewayRouteDefinition.setFilters(filterDefinitionList);
+        // 设置过滤器
+        Object filterobject = sysRouteConfEntity.getFilters();
+        if(Objects.nonNull(filterobject)){
+            List<GatewayFilterDefinition> filterDefinitionList = new ArrayList<>();
+            JSONArray filterArray = JSONArray.fromObject(String.valueOf(filterobject));
+            log.info("过滤器数组：{}"+ filterArray);
+            for (int i =0;i<filterArray.size();i++){
+                JSONObject filterObject = filterArray.getJSONObject(i);
+                GatewayFilterDefinition filterDefinition = new GatewayFilterDefinition();
+                filterDefinition.setName(filterObject.getString("name"));
+                JSONObject argsObject = (JSONObject)filterObject.get("args");
+                log.info("获取args:{}"+argsObject);
+                if (argsObject.isEmpty()){
+                    log.info("获取args:{}"+argsObject);
+                    Map<String,String> map = new HashMap<>();
+                    filterDefinition.setArgs(map);
+                }else {
+                    Map<String,String> map = new HashMap<>();
+                    map.put("_genkey_0",String.valueOf(argsObject.get("_genkey_0")));
+                    filterDefinition.setArgs(map);
+                }
+                filterDefinitionList.add(filterDefinition);
+            }
+            gatewayRouteDefinition.setFilters(filterDefinitionList);
+        }
         // 设置排序
         gatewayRouteDefinition.setOrder(0);
         // 设置转发路径

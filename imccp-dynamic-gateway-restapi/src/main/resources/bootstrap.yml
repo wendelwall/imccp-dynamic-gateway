@@ -1,9 +1,18 @@
+server:
+  port: 8086
 spring:
   application:
     name: imccp-dynamic-gateway-restapi
+  datasource:
+    url: jdbc:mysql://116.62.28.180:3306/riskeys_yb?useUnicode=true&characterEncoding=UTF-8&useSSL=false
+    username: riskeys_yb
+    password: Ja5pe+hYjBc=
+    driver-class-name: com.mysql.jdbc.Driver
   profiles:
     active: @spring.active@
   cloud:
+    refresh:
+      refreshable: none
     config:
       profile: @spring.active@
       label: develop
@@ -27,3 +36,5 @@ eureka:
     leaseRenewalIntervalInSeconds: 10 #表示eureka client发送心跳给server端的频率，默认为30秒
     health-check-url-path: /actuator/health #健康检查的地址（依赖spring-boot-starter-actuator）
 ---
+mybatis:
+  mapper-locations: classpath:mapper/**/*.xml
