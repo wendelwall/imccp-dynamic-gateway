@@ -22,9 +22,9 @@ spring:
       profile: @spring.active@
       label: develop
 #  activemq:
-#    host: 116.62.28.180
-#    username: anyi
-#    password: QmA17YugOQq
+#    host: ip
+#    username: 用户名
+#    password: 密码
 
 
 ---

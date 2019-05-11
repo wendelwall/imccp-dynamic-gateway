@@ -1,7 +1,7 @@
-#spring.rabbitmq.host=116.62.28.180
+#spring.rabbitmq.host=ip
 #spring.rabbitmq.port=5672
-#spring.rabbitmq.username=anyi
-#spring.rabbitmq.password=QmA17YugOQq
+#spring.rabbitmq.username=\u7528\u6237\u540D
+#spring.rabbitmq.password=\u5BC6\u7801
 
 
 #mq.env=local

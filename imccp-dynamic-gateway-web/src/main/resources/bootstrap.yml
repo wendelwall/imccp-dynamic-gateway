@@ -7,10 +7,10 @@ spring:
   profiles:
     active: @spring.active@
 #  rabbitmq:
-#    host: 116.62.28.180
+#    host: ip
 #    port: 5672
-#    username: anyi
-#    password: QmA17YugOQq
+#    username: 用户名
+#    password: 密码
 
   kafka:
     producer:
