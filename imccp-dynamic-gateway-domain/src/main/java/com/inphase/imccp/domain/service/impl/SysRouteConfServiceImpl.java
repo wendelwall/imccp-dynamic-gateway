@@ -5,21 +5,23 @@ import com.inphase.imccp.domain.entity.GatewayFilterDefinition;
 import com.inphase.imccp.domain.entity.GatewayPredicateDefinition;
 import com.inphase.imccp.domain.entity.GatewayRouteDefinition;
 import com.inphase.imccp.domain.entity.SysRouteConfEntity;
+import com.inphase.imccp.domain.service.SysRouteConfService;
 import com.inphase.imccp.object.constant.ResultCode;
 import com.inphase.imccp.object.returnobject.JsonResult;
-import com.inphase.imccp.domain.service.SysRouteConfService;
 import com.inphase.imccp.object.returnobject.gitListResult;
 import com.inphase.imccp.object.util.SnowflakeIdWorker;
 import com.inphase.imccp.object.vo.SysRouteConfVo;
+import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
-import org.springframework.stereotype.Service;
 import org.springframework.data.redis.core.RedisTemplate;
-import net.sf.json.JSONArray;
+import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
+import org.springframework.kafka.core.KafkaTemplate;
+import org.springframework.stereotype.Service;
+import org.springframework.util.concurrent.ListenableFuture;
+
 import javax.annotation.Resource;
 import java.sql.Timestamp;
 import java.util.*;
@@ -39,8 +41,10 @@ public class SysRouteConfServiceImpl implements SysRouteConfService {
     @Resource
     private RedisTemplate redisTemplate;
 
+//    @Autowired
+//    private AmqpTemplate amqpTemplate;
     @Autowired
-    private AmqpTemplate amqpTemplate;
+    private KafkaTemplate kafkaTemplate;
 
     private String ROUTE_KEY = "gateway_route_key";
 
@@ -116,7 +120,10 @@ public class SysRouteConfServiceImpl implements SysRouteConfService {
             redisTemplate.setHashValueSerializer(new Jackson2JsonRedisSerializer<>(GatewayRouteDefinition.class));
             redisTemplate.opsForHash().put(ROUTE_KEY, gatewayRouteDefinition.getId(), gatewayRouteDefinition);
         }
-        amqpTemplate.convertAndSend("exchange","topic.update","*********更新路由************");
+        String message = "*********更新路由************";
+        ListenableFuture future = kafkaTemplate.send("topic.update",message);
+        future.addCallback(o -> System.out.println("send-消息发送成功：" + message), throwable -> System.out.println("消息发送失败：" + message));
+//        amqpTemplate.convertAndSend("exchange","topic.update","*********更新路由************");
         return new JsonResult(ResultCode.SUCCESS.code(),ResultCode.SUCCESS.message());
     }
 
@@ -135,7 +142,8 @@ public class SysRouteConfServiceImpl implements SysRouteConfService {
         JsonResult jsonResult = new JsonResult();
         try {
             log.info("*********开始写入消息到队列");
-            amqpTemplate.convertAndSend("exchange","topic.send","*********初始化路由************");
+            kafkaTemplate.send("exchange","topic.send","*********初始化路由************");
+//            amqpTemplate.convertAndSend("exchange","topic.send","*********初始化路由************");
             log.info("*********结束写入消息到队列");
         }catch (Exception e){
             jsonResult.setCode(ResultCode.INPUT_QUEUE_FAILD.code());

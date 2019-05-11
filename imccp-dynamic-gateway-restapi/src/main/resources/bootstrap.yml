@@ -4,9 +4,9 @@ spring:
   application:
     name: imccp-dynamic-gateway-restapi
   datasource:
-    url: jdbc:mysql://116.62.28.180:3306/riskeys_yb?useUnicode=true&characterEncoding=UTF-8&useSSL=false
-    username: riskeys_yb
-    password: Ja5pe+hYjBc=
+    url: jdbc:mysql://localhost/riskeys_yb?useUnicode=true&characterEncoding=UTF-8&useSSL=false
+    username: root
+    password: sqlzyydxe
     driver-class-name: com.mysql.jdbc.Driver
   profiles:
     active: @spring.active@
@@ -39,7 +39,7 @@ eureka:
   client:
     registryFetchIntervalSeconds: 5 #表示eureka client间隔多久去拉取服务注册信息，默认为30秒
     service-url:
-      defaultZone: http://localhost:8761/eureka/ #http://imccp-local-register.imccp:8761/eureka/
+      defaultZone: http://user:password@localhost:8761/eureka/ #http://imccp-local-register.imccp:8761/eureka/
     registry-fetch-interval-seconds: 10
   instance:
     prefer-ip-address: true

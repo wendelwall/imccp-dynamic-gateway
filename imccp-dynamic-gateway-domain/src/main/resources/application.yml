@@ -1,0 +1,23 @@
+#spring.rabbitmq.host=116.62.28.180
+#spring.rabbitmq.port=5672
+#spring.rabbitmq.username=anyi
+#spring.rabbitmq.password=QmA17YugOQq
+
+
+#mq.env=local
+#basic.info.mq.exchange.name=${mq.env}:basic:info:mq:exchange
+#basic.info.mq.routing.key.name=${mq.env}:basic:info:mq:routing:key
+#basic.info.mq.queue.name=${mq.env}:basic:info:mq:queue
+
+spring:
+  kafka:
+    producer:
+      # \u670D\u52A1\u5668\u5730\u5740
+      bootstrap-servers: 127.0.0.1:9092
+      # key/value\u7684\u5E8F\u5217\u5316
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
+      # \u6279\u91CF\u6293\u53D6
+      batch-size: 65536
+      # \u7F13\u5B58\u5BB9\u91CF
+      buffer-memory: 524288
