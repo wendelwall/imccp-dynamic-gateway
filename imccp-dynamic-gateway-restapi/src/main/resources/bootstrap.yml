@@ -8,8 +8,8 @@ spring:
     username: root
     password: sqlzyydxe
     driver-class-name: com.mysql.jdbc.Driver
-  profiles:
-    active: @spring.active@
+#  profiles:
+#    active: @spring.active@
   redis:
     host: localhost
     database: 0
@@ -19,7 +19,7 @@ spring:
     refresh:
       refreshable: none
     config:
-      profile: @spring.active@
+#      profile: @spring.active@
       label: develop
 #  activemq:
 #    host: ip
